@@ -43,4 +43,18 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
+// 1. Method to match passwords
+// We use this when users tries to login
+userSchema.method.matchPassword = async function(enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+};
+
+
+
+
+
 module.exports = mongoose.model('User', userSchema)
