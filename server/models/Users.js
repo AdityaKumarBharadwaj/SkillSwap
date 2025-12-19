@@ -53,8 +53,16 @@ userSchema.method.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
-
-
-
+// 2. Encrypt password before saving
+// This runs automatically every time we save a user
+userSchema.pre('save', async function(next) {
+    // If password is not modified, then skip hashing (e.g, if just updating email)
+    if(!this.isModified('password')) {
+        next();
+    }
+    // Salt is random data added to make hash even more stronger
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+})
 
 module.exports = mongoose.model('User', userSchema)
