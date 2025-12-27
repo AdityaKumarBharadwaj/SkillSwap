@@ -13,7 +13,7 @@ connectDB();
 const app = express();
 
 // 3. Middleware (The Gatekeepers)
-app.use(express.json);    // Allows server to accept JSON data in body
+app.use(express.json());    // Allows server to accept JSON data in body
 app.use(cors());        // Allows React to talk to this server
 app.use('/api/auth', authRoutes);
 
