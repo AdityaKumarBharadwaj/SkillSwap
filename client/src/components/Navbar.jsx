@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import { LogOut, Menu, User } from "lucide-react";
+import logo from "../assets/logo.png"
+
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -10,8 +12,10 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo */}
+          
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
+            <img src={logo} alt="" className="h-15 w-auto object-contain" />
               <div className="bg-primary p-2 rounded-lg">
                 <Menu className="h-6 w-6 text-white"></Menu>
               </div>
