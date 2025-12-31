@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const skillRoutes = require('./routes/skillRoutes');
+
 
 // 1. Load environment variables
 dotenv.config();
@@ -16,11 +18,14 @@ const app = express();
 app.use(express.json());    // Allows server to accept JSON data in body
 app.use(cors());        // Allows React to talk to this server
 app.use('/api/auth', authRoutes);
+app.use('/api', authRoutes);
+app.use('/api/skills', skillRoutes);
 
 // 4. API routes
 app.get('/', (req, res) => {
     res.send('Api is running....');
 })
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, ()=> {
