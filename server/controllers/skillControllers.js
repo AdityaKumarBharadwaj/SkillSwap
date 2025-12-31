@@ -24,4 +24,4 @@ const createSkill = async (req, res) => {
     });
 };
 
-module.exports = { getSkills, createSkill };
+module.exports = { getSkills, createSkill }; 
