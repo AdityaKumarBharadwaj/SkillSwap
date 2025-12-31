@@ -8,7 +8,7 @@ import logo from "../assets/logo.png"
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200">
+    <nav className="bg-gray-950 shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo */}
@@ -19,8 +19,8 @@ const Navbar = () => {
               <div className="bg-primary p-2 rounded-lg">
                 <Menu className="h-6 w-6 text-white"></Menu>
               </div>
-              <span className="text-2xl font-bold text-gray-900 tracking-tight">
-                Skill<span className="text-primary">Swap</span>
+              <span className="text-2xl font-bold text-white tracking-tight">
+                SkillSwap
               </span>
             </Link>
           </div>
@@ -43,7 +43,7 @@ const Navbar = () => {
               </>
             ) : (
               <div className="flex gap-3">
-                <Link to="/login" className="text-gray-600 bg-gray-300 rounded hover:text-primary hover:bg-indigo-600 hover:text-white font-medium px-3 py-2">
+                <Link to="/login" className="text-gray-950 bg-gray-50 rounded hover:text-primary hover:bg-indigo-600 hover:text-white font-medium px-3 py-2">
                   Login
                 </Link>
                 <Link to="/register" className="bg-green-300 hover:bg-indigo-700 text-black px-5 py-2 rounded-lg font-medium transition-all shadow-lg shadow-indigo-200">

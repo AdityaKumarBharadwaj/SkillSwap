@@ -12,20 +12,18 @@ const Home = () => {
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[80vh] text-center px-4 bg-cover bg-center bg-no-repeat relative" style={{backgroundImage: `url(${HeroBg})`}}>
-        <div className="absolute inset-0 bg-white/60">
-        </div>
+        <div className="absolute inset-0 bg-white/50"></div>
         <div className="relative z-10">
           <h1 className="text-5xl font-extrabold text-black mb-6">
           Exchange Skills, Build Community.
         </h1>
-        <p className="text-xl text-blue-800 font-bold mb-8 max-w-2xl">
+        <p className="text-xl text-black font-bold mb-25 text-shadow-2xs text-shadow-neutral-700 mb-8 max-w-2xl">
           The marketplace where time is the only currency. Teach what you love, learn what you need.
         </p>
-        <Link to="/register" className="bg-[oklch(80.8%_0.114_19.571)] text-black px-8 py-4 rounded-xl text-lg font-bold hover:bg-indigo-700 transition-all shadow-xl hover:text-amber-50 shadow-indigo-200">
+        <Link to="/register" className="bg-white text-black px-8 py-4 rounded-xl text-lg font-bold hover:bg-indigo-700 transition-all shadow-xl hover:text-amber-50 shadow-indigo-200">
           Join the Neighbourhood
         </Link>
         </div>
-        
       </div>
     );
   }
