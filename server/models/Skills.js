@@ -1,4 +1,4 @@
-const mongoose = require('mongooose');
+const mongoose = require('mongoose');
 
 const skillSchema = new mongoose.Schema({
     user: {
@@ -25,7 +25,7 @@ const skillSchema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now()
+        default: Date.now    // Date.now() executes once when the server starts. You should pass the function reference Date.now so it executes when a document is created.
     }
 });
 

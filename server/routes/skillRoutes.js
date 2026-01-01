@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {getSkills, createSkill } = require('../controllers/skillController');
+const {getSkills, createSkill } = require('../controllers/skillControllers');
 const { protect } = require('../middleware/authMiddleware');
 
 // Route: /api/skills

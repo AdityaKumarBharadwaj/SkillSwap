@@ -5,7 +5,7 @@ const Skill = require('../models/Skills');
 // @ access
 const getSkills = async (req, res) => {
     // Sort by newest first
-    const skills = await Skill.find().populate('user', 'name location ').sort({creartedAt: -1});
+    const skills = await Skill.find().populate('user', 'name location ').sort({createdAt: -1});
     res.json(skills);
 };
 
