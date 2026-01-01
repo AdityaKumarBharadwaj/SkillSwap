@@ -22,6 +22,7 @@ const createSkill = async (req, res) => {
         category,
         location: location || req.user.location // use user's location if not specified;
     });
+    res.status(201).json(skill);
 };
 
 module.exports = { getSkills, createSkill }; 
