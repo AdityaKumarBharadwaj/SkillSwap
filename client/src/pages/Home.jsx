@@ -69,7 +69,7 @@ const Home = () => {
 
       {/* Action Buttons */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <button className="flex items-center justify-center gap-3 p-8 bg-white border-2 border-dashed border-gray-300 rounded-2xl hover:border-primary hover:bg-indigo-50 transition-all group">
+        <Link to="/add-skill" className="flex items-center justify-center gap-3 p-8 bg-white border-2 border-dashed border-gray-300 rounded-2xl hover:border-primary hover:bg-indigo-50 transition-all group">
           <div className="bg-indigo-100 text-indigo-600 p-3 rounded-full group-hover:scale-110 transition-transform">
             <PlusCircle className="h-8 w-8" />
           </div>
@@ -77,7 +77,7 @@ const Home = () => {
             <h3 className="text-lg font-bold text-gray-900">Offer a Skill</h3>
             <p className="text-sm text-gray-500">List what you can teach</p>
           </div>
-        </button>
+        </Link>
 
         <button className="flex items-center justify-center gap-3 p-8 bg-white border-2 border-dashed border-gray-300 rounded-2xl hover:border-secondary hover:bg-green-50 transition-all group">
           <div className="bg-green-100 text-green-600 p-3 rounded-full group-hover:scale-110 transition-transform">
