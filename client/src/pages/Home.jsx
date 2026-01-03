@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { Clock, MapPin, Search, PlusCircle, Star, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import heroBg from "../assets/heroBg.png"
 import axios from "axios";
 
 const Home = () => {
@@ -28,20 +29,26 @@ const Home = () => {
   // If not logged in, show the Landing Page
   if (!user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[80vh] text-center px-4">
-        <h1 className="text-5xl font-extrabold text-gray-900 mb-6">
-          Exchange Skills, <span className="text-primary">Build Community.</span>
-        </h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl">
-          The marketplace where time is the only currency. Teach what you love, learn what you need.
-        </p>
-        <Link to="/register" className="bg-primary text-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200">
-          Join the Neighborhood
-        </Link>
+      <div
+        className="flex flex-col items-center justify-center min-h-[90vh] text-center px-4 bg-cover bg-center bg-no-repeat relative"
+        style={{ backgroundImage: `url(${heroBg})` }}
+      >
+        <div className="absolute inset-0 bg-white/20"></div>
+        <div className="relative z-10 max-w-4xl mx-auto">
+            <h1 className="text-5xl font-extrabold text-gray-900 mb-6 leading-tight [text-shadow:0_0_14px_rgba(255,255,255,.9)] [-webkit-text-stroke:1px_rgba(0,0,0,.4)] ">Exchange Skills, <span className="text-indigo-600">Build Community.</span></h1>
+
+            <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto font-medium">
+              The marketplace where time is the only currency. Teach what you love, learn what you need.
+            </p>
+            <Link to="/register" className="bg-white text-black px-8 py-4 rounded-xl text-lg font-bold hover:bg-indigo-700 transition-all shadow-xl hover:text-amber-50 shadow-indigo-200 inline-block">
+              Join the Neighbourhood
+            </Link>
+        </div>
       </div>
     );
   }
 
+  // LOGGED IN VIEW (DASHBOARD)
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       
@@ -53,7 +60,7 @@ const Home = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {/* Credit Card */}
-        <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
+        <div className="bg-gradient from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
           <div className="flex items-center justify-between mb-4">
             <span className="bg-white/20 p-2 rounded-lg"><Clock className="h-6 w-6" /></span>
             <span className="text-sm font-medium bg-white/20 px-2 py-1 rounded">Time Bank</span>

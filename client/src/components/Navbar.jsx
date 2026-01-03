@@ -8,16 +8,16 @@ import logo from "../assets/logo.png"
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   return (
-    <nav className="bg-[#fffcf9] shadow-sm border-b border-gray-200">
+    <nav className="bg-[#424b71d0]  shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo */}
           
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="" className="h-15 w-auto object-contain" />
+            <img src={logo} alt="" className="h-15 w-auto object-contain rounded-xl" />
               <div className="bg-primary p-2 rounded-lg">
-                <Menu className="h-6 w-6 text-white"></Menu>
+                {/* <Menu className="h-6 w-6 text-white"></Menu> */}
               </div>
               <span className="text-2xl font-bold text-white tracking-tight">
                 SkillSwap
