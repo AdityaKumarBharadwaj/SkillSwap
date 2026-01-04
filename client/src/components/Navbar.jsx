@@ -1,3 +1,11 @@
+/**
+ * @file Navbar.jsx
+ * @description Main navigation component for the SkillSwap application. 
+ * Handles user authentication state display (Login/Logout) and navigation links.
+ * @module Components/Navbar
+ */
+
+
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
