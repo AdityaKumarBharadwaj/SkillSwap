@@ -86,3 +86,5 @@ const Login = () => {
 };
 
 export default Login;
+
+// add bg and also improve ui
