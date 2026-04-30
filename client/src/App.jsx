@@ -9,6 +9,7 @@
 import React from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
 // Component Imports
 import Navbar from './components/Navbar';
@@ -16,6 +17,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AddSkill from './pages/AddSkill';
+import Profile from './pages/Profile';
 
 /**
  * App Component
@@ -36,6 +38,7 @@ const App = () => {
         <Router>
           {/* Main Layout Container: Ensures full height and consistent background */}
           <div className="min-h-screen bg-gray-50 font-sans">
+            <Toaster position="top-right" />
             
             {/* Navigation Bar: Persists across all pages */}
             <Navbar />
@@ -49,6 +52,7 @@ const App = () => {
               
               {/* Protected Routes (Logic handled inside pages or middleware) */}
               <Route path='/add-skill' element={<AddSkill />} />
+              <Route path='/profile' element={<Profile />} />
             </Routes>
             
           </div>
