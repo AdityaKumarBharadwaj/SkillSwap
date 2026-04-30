@@ -71,5 +71,28 @@ const loginUser = async (req, res) => {
         res.status(401).json({message: 'Invalid email or password'});
     }
 }
+// @desc Get user profile
+// @route GET /api/auth/profile
+// @access Private
+const getUserProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (user) {
+            res.json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                location: user.location,
+                timeCredits: user.timeCredits,
+                rating: user.rating,
+                createdAt: user.createdAt
+            });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+};
 
-module.exports = {registerUser, loginUser};
+module.exports = {registerUser, loginUser, getUserProfile};
