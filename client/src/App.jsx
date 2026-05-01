@@ -18,6 +18,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import AddSkill from './pages/AddSkill';
 import Profile from './pages/Profile';
+import heroBgImage from './assets/hero_bg_image.png';
 
 /**
  * App Component
@@ -37,11 +38,23 @@ const App = () => {
       <AuthProvider>
         <Router>
           {/* Main Layout Container: Ensures full height and consistent background */}
-          <div className="min-h-screen bg-gray-50 font-sans">
-            <Toaster position="top-right" />
+          <div 
+            className="min-h-screen font-sans relative"
+            style={{ 
+              backgroundImage: `url(${heroBgImage})`, 
+              backgroundSize: 'cover', 
+              backgroundPosition: 'center', 
+              backgroundAttachment: 'fixed' 
+            }}
+          >
+            {/* Light overlay to ensure text readability */}
+            <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-0 pointer-events-none"></div>
             
-            {/* Navigation Bar: Persists across all pages */}
-            <Navbar />
+            <div className="relative z-10">
+              <Toaster position="top-right" />
+              
+              {/* Navigation Bar: Persists across all pages */}
+              <Navbar />
             
             {/* Route Definitions: Renders specific pages based on URL */}
             <Routes>
@@ -54,6 +67,7 @@ const App = () => {
               <Route path='/add-skill' element={<AddSkill />} />
               <Route path='/profile' element={<Profile />} />
             </Routes>
+            </div>
             
           </div>
         </Router>

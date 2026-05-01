@@ -45,7 +45,7 @@ const AddSkill = () => {
     };
 
     return (
-        <div className="min-h-[calc(100vh-64px)] bg-gray-50 py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="min-h-[calc(100vh-64px)] bg-transparent py-12 sm:px-6 lg:px-8 relative overflow-hidden">
             {/* Background elements */}
             <div className="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-indigo-300 opacity-20 blur-3xl"></div>
             

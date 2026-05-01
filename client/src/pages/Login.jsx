@@ -30,7 +30,7 @@ const Login = () => {
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Premium Background Elements */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-y-0 w-full h-full bg-gray-50"></div>
+        <div className="absolute inset-y-0 w-full h-full bg-transparent"></div>
         <div className="absolute top-0 left-0 -ml-20 -mt-20 w-72 h-72 rounded-full bg-indigo-300 opacity-20 blur-3xl"></div>
         <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-72 h-72 rounded-full bg-purple-300 opacity-20 blur-3xl"></div>
       </div>
