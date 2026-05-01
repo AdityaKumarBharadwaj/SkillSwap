@@ -1,48 +1,147 @@
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
-import { Clock, MapPin, Search, PlusCircle, Star, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Clock, MapPin, Search, PlusCircle, Star, User, Zap, Shield, ArrowRight } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import heroBg from "../assets/heroBg.png"
 import axios from "axios";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [requestingId, setRequestingId] = useState(null);
+  const navigate = useNavigate();
 
-  // 1. Fetch Skills when the page loads
+  // Fetch Skills
+  const fetchSkills = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:5000/api/skills");
+      setSkills(data);
+    } catch (error) {
+      console.error("Error fetching skills:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:5000/api/skills");
-        setSkills(data);
-      } catch (error) {
-        console.error("Error fetching skills:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchSkills();
   }, []);
 
-  // If not logged in, show the Landing Page
+  const handleRequestSkill = async (skillId) => {
+    if (!user) {
+      toast.error("Please login to request a skill");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      setRequestingId(skillId);
+      const token = JSON.parse(localStorage.getItem('user'))?.token;
+      await axios.post(`http://localhost:5000/api/skills/${skillId}/request`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success("Skill requested successfully! Check your Profile.");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to request skill");
+    } finally {
+      setRequestingId(null);
+    }
+  };
+
+  // If not logged in, show the Premium Landing Page
   if (!user) {
     return (
-      <div
-        className="flex flex-col items-center justify-center min-h-[90vh] text-center px-4 bg-cover bg-center bg-no-repeat relative"
-        style={{ backgroundImage: `url(${heroBg})` }}
-      >
-        <div className="absolute inset-0 bg-white/20"></div>
-        <div className="relative z-10 max-w-4xl mx-auto">
-            <h1 className="text-5xl font-extrabold text-gray-900 mb-6 leading-tight [text-shadow:0_0_14px_rgba(255,255,255,.9)] [-webkit-text-stroke:1px_rgba(0,0,0,.4)] ">Exchange Skills, <span className="text-indigo-600">Build Community.</span></h1>
+      <div className="bg-white">
+        {/* Hero Section */}
+        <div className="relative isolate pt-14">
+          <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
+            <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style={{clipPath: "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"}}></div>
+          </div>
+          <div className="py-24 sm:py-32 lg:pb-40">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <div className="mx-auto max-w-2xl text-center">
+                <motion.h1 
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-6xl"
+                >
+                  Exchange Skills, <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Build Community.</span>
+                </motion.h1>
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.8 }}
+                  className="mt-6 text-lg leading-8 text-gray-600"
+                >
+                  The marketplace where time is the only currency. Teach what you love, learn what you need. Join thousands of neighbors exchanging value without spending a dime.
+                </motion.p>
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.8 }}
+                  className="mt-10 flex items-center justify-center gap-x-6"
+                >
+                  <Link to="/register" className="rounded-xl bg-indigo-600 px-8 py-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all shadow-indigo-200">
+                    Join the Neighborhood
+                  </Link>
+                  <a href="#how-it-works" className="text-sm font-semibold leading-6 text-gray-900 flex items-center gap-1 group">
+                    Learn more <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                </motion.div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto font-medium">
-              The marketplace where time is the only currency. Teach what you love, learn what you need.
-            </p>
-            <Link to="/register" className="bg-white text-black px-8 py-4 rounded-xl text-lg font-bold hover:bg-indigo-700 transition-all shadow-xl hover:text-amber-50 shadow-indigo-200 inline-block">
-              Join the Neighbourhood
-            </Link>
+        {/* Feature Section */}
+        <div id="how-it-works" className="py-24 sm:py-32 bg-gray-50">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl lg:text-center">
+              <h2 className="text-base font-semibold leading-7 text-indigo-600">Time is money</h2>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Everything you need to exchange skills</p>
+            </div>
+            <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+              <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+                <div className="flex flex-col bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                  <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                    <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-indigo-600 text-white">
+                      <Clock className="h-6 w-6" />
+                    </div>
+                    Earn Time Credits
+                  </dt>
+                  <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                    <p className="flex-auto">For every hour you spend helping a neighbor, you earn one Time Credit. Everyone's time is valued equally.</p>
+                  </dd>
+                </div>
+                <div className="flex flex-col bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                  <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                    <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-indigo-600 text-white">
+                      <Search className="h-6 w-6" />
+                    </div>
+                    Find What You Need
+                  </dt>
+                  <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                    <p className="flex-auto">Use your earned credits to get help with anything from plumbing and guitar lessons to tech support.</p>
+                  </dd>
+                </div>
+                <div className="flex flex-col bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                  <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                    <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-indigo-600 text-white">
+                      <Shield className="h-6 w-6" />
+                    </div>
+                    Safe & Secure
+                  </dt>
+                  <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                    <p className="flex-auto">Our platform verifies users and facilitates a secure exchange system so you can swap skills with peace of mind.</p>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -50,126 +149,149 @@ const Home = () => {
 
   // LOGGED IN VIEW (DASHBOARD)
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+    >
       
       {/* --- SECTION 1: USER STATS --- */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Hello, {user.name}! 👋</h1>
-        <p className="text-gray-500">Here is what's happening in your neighborhood.</p>
+        <h1 className="text-3xl font-extrabold text-gray-900">Hello, {user.name}! 👋</h1>
+        <p className="text-gray-500 mt-2">Here is what's happening in your neighborhood.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {/* Credit Card */}
-        <div className="bg-gradient from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg">
+        <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-6 text-white shadow-xl shadow-indigo-200/50 transform hover:-translate-y-1 transition-all">
           <div className="flex items-center justify-between mb-4">
-            <span className="bg-white/20 p-2 rounded-lg"><Clock className="h-6 w-6" /></span>
-            <span className="text-sm font-medium bg-white/20 px-2 py-1 rounded">Time Bank</span>
+            <span className="bg-white/20 p-2 rounded-xl backdrop-blur-sm"><Clock className="h-6 w-6" /></span>
+            <span className="text-xs font-bold uppercase tracking-wider bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">Time Bank</span>
           </div>
-          <div className="text-4xl font-bold mb-1">{user.timeCredits} hrs</div>
-          <div className="text-indigo-100 text-sm">Available balance</div>
+          <div className="text-5xl font-black mb-1">{user.timeCredits} <span className="text-2xl font-medium text-indigo-100">hrs</span></div>
+          <div className="text-indigo-100 text-sm font-medium">Available balance</div>
         </div>
 
         {/* Location Card */}
-        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-4">
-            <span className="bg-green-100 text-green-600 p-2 rounded-lg"><MapPin className="h-6 w-6" /></span>
+            <span className="bg-teal-50 text-teal-600 p-2 rounded-xl"><MapPin className="h-6 w-6" /></span>
           </div>
-          <div className="text-xl font-bold text-gray-900 mb-1">{user.location}</div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">{user.location}</div>
           <div className="text-gray-500 text-sm">Current Neighborhood</div>
         </div>
 
         {/* Reputation Card */}
-        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-4">
-            <span className="bg-yellow-100 text-yellow-600 p-2 rounded-lg"><Star className="h-6 w-6" /></span>
+            <span className="bg-amber-50 text-amber-500 p-2 rounded-xl"><Star className="h-6 w-6" /></span>
           </div>
-          <div className="text-xl font-bold text-gray-900 mb-1">Newcomer</div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">Newcomer</div>
           <div className="text-gray-500 text-sm">Complete 1st swap to level up</div>
         </div>
       </div>
 
       {/* --- SECTION 2: ACTIONS --- */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-        <Link to="/add-skill" className="flex items-center justify-center gap-3 p-8 bg-white border-2 border-dashed border-gray-300 rounded-2xl hover:border-primary hover:bg-indigo-50 transition-all group">
-          <div className="bg-indigo-100 text-primary p-3 rounded-full group-hover:scale-110 transition-transform">
+        <Link to="/add-skill" className="flex items-center p-6 bg-white border border-gray-100 shadow-sm rounded-2xl hover:border-indigo-300 hover:shadow-md transition-all group">
+          <div className="bg-indigo-50 text-indigo-600 p-4 rounded-full group-hover:scale-110 transition-transform mr-6">
             <PlusCircle className="h-8 w-8" />
           </div>
           <div className="text-left">
             <h3 className="text-lg font-bold text-gray-900">Offer a Skill</h3>
-            <p className="text-sm text-gray-500">List what you can teach</p>
+            <p className="text-sm text-gray-500">List what you can teach and earn credits</p>
           </div>
         </Link>
 
-        <button className="flex items-center justify-center gap-3 p-8 bg-white border-2 border-dashed border-gray-300 rounded-2xl hover:border-secondary hover:bg-green-50 transition-all group">
-          <div className="bg-green-100 text-secondary p-3 rounded-full group-hover:scale-110 transition-transform">
+        <div className="flex items-center p-6 bg-white border border-gray-100 shadow-sm rounded-2xl hover:border-purple-300 hover:shadow-md transition-all group cursor-pointer">
+          <div className="bg-purple-50 text-purple-600 p-4 rounded-full group-hover:scale-110 transition-transform mr-6">
             <Search className="h-8 w-8" />
           </div>
           <div className="text-left">
             <h3 className="text-lg font-bold text-gray-900">Find Help</h3>
-            <p className="text-sm text-gray-500">Browse local listings</p>
+            <p className="text-sm text-gray-500">Browse below to request a neighbor's skill</p>
           </div>
-        </button>
+        </div>
       </div>
 
       {/* --- SECTION 3: SKILLS FEED --- */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Recently Added Skills</h2>
+        <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Community Skills Feed</h2>
+            <span className="text-sm text-gray-500 font-medium">{skills.length} available</span>
+        </div>
         
         {loading ? (
-          <p className="text-gray-500">Loading skills...</p>
+          <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          </div>
         ) : skills.length === 0 ? (
-          <div className="text-center py-10 bg-white rounded-xl border border-gray-200">
-            <p className="text-gray-500">No skills listed yet. Be the first!</p>
+          <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <p className="text-gray-500 font-medium">No skills listed yet. Be the first!</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {skills.map((skill) => (
-              <div key={skill._id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-                <div className="p-6">
+              <motion.div 
+                whileHover={{ y: -4 }}
+                key={skill._id} 
+                className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all flex flex-col"
+              >
+                <div className="p-6 flex-grow">
                   <div className="flex justify-between items-start mb-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold 
-                      ${skill.category === 'Education' ? 'bg-blue-100 text-blue-800' : 
-                        skill.category === 'Household' ? 'bg-orange-100 text-orange-800' :
-                        'bg-gray-100 text-gray-800'}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase
+                      ${skill.category === 'Education' ? 'bg-blue-50 text-blue-700' : 
+                        skill.category === 'Household' ? 'bg-orange-50 text-orange-700' :
+                        skill.category === 'Tech' ? 'bg-teal-50 text-teal-700' :
+                        'bg-gray-100 text-gray-700'}`}>
                       {skill.category}
                     </span>
-                    <span className="text-xs text-gray-400">
-                      {new Date(skill.createdAt).toLocaleDateString()}
+                    <span className="text-xs font-medium text-gray-400">
+                      {new Date(skill.createdAt).toLocaleDateString(undefined, {month: 'short', day: 'numeric'})}
                     </span>
                   </div>
                   
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{skill.title}</h3>
-                  <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{skill.title}</h3>
+                  <p className="text-gray-600 text-sm line-clamp-3 mb-6">
                     {skill.description}
                   </p>
-                  
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                    <div className="flex items-center gap-2">
-                      <div className="bg-gray-100 p-1.5 rounded-full">
-                        <User className="h-4 w-4 text-gray-600" />
+                </div>
+                
+                <div className="p-6 pt-0 mt-auto border-t border-gray-50 bg-gray-50/50">
+                  <div className="flex items-center justify-between mt-4">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-white p-2 rounded-full shadow-sm border border-gray-100">
+                        <User className="h-4 w-4 text-gray-500" />
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium text-gray-900">
-                           {/* Handle case where user might be null (deleted) */}
-                           {skill.user ? skill.user.name : "Unknown User"}
+                        <span className="text-sm font-bold text-gray-900">
+                           {skill.user ? skill.user.name : "Unknown"}
                         </span>
-                        <span className="text-[10px] text-gray-500">
+                        <span className="text-xs text-gray-500 font-medium">
                            {skill.location}
                         </span>
                       </div>
                     </div>
-                    <button className="text-primary text-sm font-semibold hover:underline">
-                      Request
+                    <button 
+                        onClick={() => handleRequestSkill(skill._id)}
+                        disabled={requestingId === skill._id || (skill.user && skill.user._id === user._id)}
+                        className={`text-sm font-bold px-4 py-2 rounded-lg transition-all shadow-sm ${
+                            skill.user && skill.user._id === user._id 
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                                : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-md'
+                        }`}
+                    >
+                      {requestingId === skill._id ? "..." : (skill.user && skill.user._id === user._id) ? "Yours" : "Request"}
                     </button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         )}
       </div>
 
-    </div>
+    </motion.div>
   );
 };
 export default Home;

@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, Sparkles } from "lucide-react";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const AddSkill = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ title: "", description: "", category: "Other", location: "" });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,122 +17,124 @@ const AddSkill = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError("");
 
         try {
-            // 1. Get the token from storage
             const user = JSON.parse(localStorage.getItem("user"));
             const token = user?.token;
 
             if (!token) {
-                setError("You must be logged in.");
+                toast.error("You must be logged in.");
                 setLoading(false);
                 return;
             }
 
-            // 2. Send the request with the token in the header
             const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             };
 
             await axios.post("http://localhost:5000/api/skills", formData, config);
             
-            // 3. Success then go back home
+            toast.success("Skill listed successfully!");
             navigate("/");
 
         } catch (err) {
-            setError(err.response?.data?.message || "Something went wrong");
+            toast.error(err.response?.data?.message || "Failed to list skill");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl mx-auto">
-                {/* Back Button */}
-                <button onClick={() => navigate('/')} className="flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors">
+        <div className="min-h-[calc(100vh-64px)] bg-gray-50 py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-indigo-300 opacity-20 blur-3xl"></div>
+            
+            <div className="max-w-2xl mx-auto relative z-10">
+                <button onClick={() => navigate('/')} className="flex items-center text-gray-600 hover:text-indigo-600 mb-6 transition-colors font-medium">
                     <ArrowLeft className="h-5 w-5 mr-2" />
                     Back to Dashboard
                 </button>
 
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                    <div className="bg-primary px-8 py-6">
-                        <h2 className="text-2xl font-bold text-white">Offer a Skill</h2>
-                        <p className="text-indigo-100 font-medium text-lg mt-1">Share your talent with the neighbourhood.</p>
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100"
+                >
+                    <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-10 text-white relative overflow-hidden">
+                        <div className="absolute top-0 right-0 opacity-10">
+                            <Sparkles className="h-32 w-32 -mt-10 -mr-10" />
+                        </div>
+                        <h2 className="text-3xl font-extrabold relative z-10">Offer a Skill</h2>
+                        <p className="text-indigo-100 font-medium text-lg mt-2 relative z-10">Share your talent and earn time credits.</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="p-8 space-y-6">
-                        {error && (
-                            <div className="bg-red-50 p-4 rounded-lg text-sm border-l-4 border-red-500 text-red-700"> {error} </div>
-                        )}
-
-                        {/* Title */}
+                    <form onSubmit={handleSubmit} className="p-8 sm:p-10 space-y-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Skill Title</label>
                             <input 
                                 type="text" 
                                 name="title" 
                                 required 
                                 placeholder="e.g. Basic Plumbing Fixes" 
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" 
+                                className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-600/50 focus:border-indigo-600 outline-none transition-all placeholder-gray-400 text-gray-900 bg-gray-50 focus:bg-white" 
                                 onChange={handleChange} 
                             />
                         </div>
 
-                        {/* Category */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                            <select 
-                                name="category" 
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary outline-none bg-white" 
-                                onChange={handleChange}
-                            >
-                                <option value="Other">Select a Category</option>
-                                <option value="Education">Education and Tutoring</option>
-                                <option value="Household">Household and Repairs</option>
-                                <option value="Tech">Tech Support</option>
-                                <option value="Art">Art and Creative</option>
-                                <option value="Sports">Sports</option>
-                            </select>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Category</label>
+                            <div className="relative">
+                                <select 
+                                    name="category" 
+                                    className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-600/50 focus:border-indigo-600 outline-none transition-all text-gray-900 bg-gray-50 focus:bg-white appearance-none cursor-pointer" 
+                                    onChange={handleChange}
+                                >
+                                    <option value="Other">Select a Category</option>
+                                    <option value="Education">Education and Tutoring</option>
+                                    <option value="Household">Household and Repairs</option>
+                                    <option value="Tech">Tech Support</option>
+                                    <option value="Art">Art and Creative</option>
+                                    <option value="Sports">Sports</option>
+                                </select>
+                            </div>
                         </div>
 
-                        {/* Description */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Description</label>
                             <textarea 
                                 name="description" 
                                 required 
                                 rows="4" 
-                                placeholder="Describe what you can help with...." 
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary outline-none transition-all resize-none" 
+                                placeholder="Describe what you can help with..." 
+                                className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-600/50 focus:border-indigo-600 outline-none transition-all resize-none placeholder-gray-400 text-gray-900 bg-gray-50 focus:bg-white" 
                                 onChange={handleChange}
                             ></textarea>
                         </div>
 
-                        {/* Location */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Location (Optional)</label>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Location (Optional)</label>
                             <input 
                                 type="text" 
                                 name="location" 
                                 placeholder="Leave blank to use your profile location" 
-                                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary outline-none transition-all" 
+                                className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-600/50 focus:border-indigo-600 outline-none transition-all placeholder-gray-400 text-gray-900 bg-gray-50 focus:bg-white" 
                                 onChange={handleChange} 
                             />
                         </div>
-                        <button 
-                            type="submit" 
-                            disabled={loading} 
-                            className="w-full flex justify-center items-center bg-primary hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-200 disabled:opacity-50"
-                        >
-                            {loading ? "Posting..." : "Post Skill"}
-                            {!loading && <CheckCircle className="ml-2 h-5 w-5" />}
-                        </button>
+                        
+                        <div className="pt-4">
+                            <button 
+                                type="submit" 
+                                disabled={loading} 
+                                className="w-full flex justify-center items-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-200 disabled:opacity-70 group"
+                            >
+                                {loading ? "Posting..." : "Post Skill to Community"}
+                                {!loading && <CheckCircle className="ml-2 h-5 w-5 group-hover:scale-110 transition-transform" />}
+                            </button>
+                        </div>
                     </form>
-                </div>
+                </motion.div>
             </div>
         </div>
     );
