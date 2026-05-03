@@ -54,62 +54,65 @@ const Home = () => {
   // If not logged in, show the Premium Landing Page
   if (!user) {
     return (
-      <div className="relative bg-gray-900 min-h-screen">
-        {/* Background Video */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
-          <video 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            className="w-full h-full object-cover opacity-40"
-          >
-            <source src={heroVideo} type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 to-gray-900"></div>
-        </div>
+      <div className="bg-transparent">
+        {/* Hero Section Wrapper */}
+        <div className="relative bg-gray-900 min-h-screen">
+          {/* Background Video */}
+          <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
+            <video 
+              autoPlay 
+              loop 
+              muted 
+              playsInline
+              className="w-full h-full object-cover opacity-40"
+            >
+              <source src={heroVideo} type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 to-gray-900"></div>
+          </div>
 
-        {/* Hero Section */}
-        <div className="relative z-10 pt-14">
-          <div className="py-24 sm:py-32 lg:pb-40">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
-              <div className="mx-auto max-w-2xl text-center">
-                <motion.h1 
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl"
-                >
-                  Exchange Skills, <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Build Community.</span>
-                </motion.h1>
-                <motion.p 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3, duration: 0.8 }}
-                  className="mt-6 text-lg leading-8 text-gray-300"
-                >
-                  The marketplace where time is the only currency. Teach what you love, learn what you need. Join thousands of neighbors exchanging value without spending a dime.
-                </motion.p>
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.8 }}
-                  className="mt-10 flex items-center justify-center gap-x-6"
-                >
-                  <Link to="/register" className="rounded-xl bg-indigo-600 px-8 py-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all shadow-indigo-500/30">
-                    Join the Neighborhood
-                  </Link>
-                  <a href="#how-it-works" className="text-sm font-semibold leading-6 text-gray-300 flex items-center gap-1 group hover:text-white transition-colors">
-                    Learn more <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </a>
-                </motion.div>
+          {/* Hero Section */}
+          <div className="relative z-10 pt-14">
+            <div className="py-24 sm:py-32 lg:pb-40">
+              <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <div className="mx-auto max-w-2xl text-center">
+                  <motion.h1 
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl"
+                  >
+                    Exchange Skills, <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Build Community.</span>
+                  </motion.h1>
+                  <motion.p 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3, duration: 0.8 }}
+                    className="mt-6 text-lg leading-8 text-gray-300"
+                  >
+                    The marketplace where time is the only currency. Teach what you love, learn what you need. Join thousands of neighbors exchanging value without spending a dime.
+                  </motion.p>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6, duration: 0.8 }}
+                    className="mt-10 flex items-center justify-center gap-x-6"
+                  >
+                    <Link to="/register" className="rounded-xl bg-indigo-600 px-8 py-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all shadow-indigo-500/30">
+                      Join the Neighborhood
+                    </Link>
+                    <a href="#how-it-works" className="text-sm font-semibold leading-6 text-gray-300 flex items-center gap-1 group hover:text-white transition-colors">
+                      Learn more <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  </motion.div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Feature Section */}
-        <div id="how-it-works" className="py-24 sm:py-32 bg-gray-50">
+        <div id="how-it-works" className="relative z-10 py-24 sm:py-32 bg-transparent">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl lg:text-center">
               <h2 className="text-base font-semibold leading-7 text-indigo-600">Time is money</h2>
