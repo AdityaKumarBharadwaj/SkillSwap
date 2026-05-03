@@ -1,41 +1,48 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
+
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const skillRoutes = require('./routes/skillRoutes');
-const path = require('path');
 
-// 1. Load environment variables
+// Load env variables
 dotenv.config();
 
-// 2. Connect to Database
+// Connect to DB
 connectDB();
 
 const app = express();
 
-// 3. Middleware (The Gatekeepers)
-app.use(express.json());    // Allows server to accept JSON data in body
-app.use(cors());        // Allows React to talk to this server
+// Middleware
+app.use(express.json());
+app.use(cors());
+
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/skills', skillRoutes);
 
-// 4. Serve Frontend
+// Serve frontend (only in production)
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/dist')));
+    const clientPath = path.join(__dirname, '../client/dist');
 
-    app.get('*', (req, res) =>
-        res.sendFile(
-            path.resolve(__dirname, '../client', 'dist', 'index.html')
-        )
-    );
+    app.use(express.static(clientPath));
+
+    // fallback for React routes
+    app.use((req, res) => {
+        res.sendFile(path.join(clientPath, 'index.html'));
+    });
 } else {
+    // simple test route
     app.get('/', (req, res) => {
-        res.send('API is running....');
+        res.send('API is running...');
     });
 }
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, ()=> {
-    console.log(`Server is running on port ${PORT}`);
+// Start server
+const PORT = process.env.PORT || 10000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
